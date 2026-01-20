@@ -3,4 +3,3 @@ history.json
 release/
 build/
 dist/
-*.spec
