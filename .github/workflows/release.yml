@@ -1,0 +1,55 @@
+name: Build & Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - arch: x64
+            python-arch: x64
+          - arch: x86
+            python-arch: x86
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          architecture: ${{ matrix.python-arch }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Get version from tag
+        id: get_version
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+          echo "Version: $version"
+
+      - name: Build with PyInstaller
+        run: pyinstaller build.spec
+
+      - name: Reorganize for ZIP
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path "package" -Force
+          Move-Item -Path "dist\github_proxy_switch" -Destination "package\github_proxy_switch-${{ matrix.arch }}-v${{ steps.get_version.outputs.version }}"
+          cd package
+          7z a "../github_proxy_switch-${{ matrix.arch }}-v${{ steps.get_version.outputs.version }}.zip" "github_proxy_switch-${{ matrix.arch }}-v${{ steps.get_version.outputs.version }}"
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: package/*.zip
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

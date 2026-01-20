@@ -1,0 +1,6 @@
+history.json
+.dev_doc
+release/
+build/
+dist/
+*.spec
