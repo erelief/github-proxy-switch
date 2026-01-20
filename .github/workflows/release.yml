@@ -44,7 +44,7 @@ jobs:
           New-Item -ItemType Directory -Path "package" -Force
           Move-Item -Path "dist\github_proxy_switch" -Destination "package\github_proxy_switch-${{ matrix.arch }}-v${{ steps.get_version.outputs.version }}"
           cd package
-          7z a "../github_proxy_switch-${{ matrix.arch }}-v${{ steps.get_version.outputs.version }}.zip" "github_proxy_switch-${{ matrix.arch }}-v${{ steps.get_version.outputs.version }}"
+          7z a "github_proxy_switch-${{ matrix.arch }}-v${{ steps.get_version.outputs.version }}.zip" "github_proxy_switch-${{ matrix.arch }}-v${{ steps.get_version.outputs.version }}"
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
