@@ -1,8 +1,10 @@
 # GitHub Proxy Switch
 
-![img](images\Gemini_Generated_Image_ec5mltec5mltec5m.png)
+![img](images/Gemini_Generated_Image_ec5mltec5mltec5m.png)
 
 一个简单的 Windows GUI 工具，用于快速开关 GitHub CLI 的代理设置。
+
+![img](images/screenshot-light.png)
 
 ## 注意事项
 - 本软件**不提供**代理服务本身，仅提供“开关”作用
